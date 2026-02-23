@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="calcul_44.js"></script>
+	<style>
+	table, th, td {
+	  border: 1px solid black;
+	  border-collapse: collapse;
+	}
+	td {
+		width: 50pt;
+		text-align: center;
+	}
+	</style>
+	<title>Calculadora 4/4</title>
+</head>
+<body>
+	<h1>Calculadora 4/4</h1>
+	<form>
+		<label for="v">V</label><input type="number" id="v" min="0" max="8" value="0">
+		<label for="n">N</label><input type="number" id="n" min="0" max="8" value="0">
+		<label for="j">J</label><input type="number" id="j" min="0" max="8" value="0">
+		<label for="q">Q</label><input type="number" id="q" min="0" max="8" value="0">
+		<label for="k">K</label><input type="number" id="k" min="0" max="8" value="0">
+		<label for="a">A</label><input type="number" id="a" min="0" max="8" value="0">
+	</form>
+	<button onclick="primera()">Primera</button>
+	<button onclick="segona()">Segona</button>
+
+	<p>Probabilitats:</p>
+	<table>
+		<tr>
+			<td></td>
+			<td>N</td>
+			<td>J</td>
+			<td>Q</td>
+			<td>K</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td>V</td>
+			<td id="p01"></td>
+			<td id="p02"></td>
+			<td id="p03"></td>
+			<td id="p04"></td>
+			<td id="p05"></td>
+		</tr>
+		<tr>
+			<td>N</td>
+			<td></td>
+			<td id="p12"></td>
+			<td id="p13"></td>
+			<td id="p14"></td>
+			<td id="p15"></td>
+		</tr>
+		<tr>
+			<td>J</td>
+			<td></td>
+			<td></td>
+			<td id="p23"></td>
+			<td id="p24"></td>
+			<td id="p25"></td>
+		</tr>
+		<tr>
+			<td>Q</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="p34"></td>
+			<td id="p35"></td>
+		</tr>
+		<tr>
+			<td>K</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="p45"></td>
+		</tr>
+	</table>
+
+	<p>Esperances:</p>
+	<table>
+		<tr>
+			<td></td>
+			<td>N</td>
+			<td>J</td>
+			<td>Q</td>
+			<td>K</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td>V</td>
+			<td id="e01"></td>
+			<td id="e02"></td>
+			<td id="e03"></td>
+			<td id="e04"></td>
+			<td id="e05"></td>
+		</tr>
+		<tr>
+			<td>N</td>
+			<td></td>
+			<td id="e12"></td>
+			<td id="e13"></td>
+			<td id="e14"></td>
+			<td id="e15"></td>
+		</tr>
+		<tr>
+			<td>J</td>
+			<td></td>
+			<td></td>
+			<td id="e23"></td>
+			<td id="e24"></td>
+			<td id="e25"></td>
+		</tr>
+		<tr>
+			<td>Q</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="e34"></td>
+			<td id="e35"></td>
+		</tr>
+		<tr>
+			<td>K</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="e45"></td>
+		</tr>
+	</table>
+
+	<p>
+		Aquí teniu una calculadora rònega per a calcular les probabilitats i esperances de cada 4/4, segons la distribució inicial de daus. No cal ser un geni per a fer-la anar, així que no hi incloc instruccions. Salut!
+	</p>
+
+	<script>
+		function segona() {
+			var daus = [parseInt(document.getElementById("v").value),
+				parseInt(document.getElementById("n").value),
+				parseInt(document.getElementById("j").value),
+				parseInt(document.getElementById("q").value),
+				parseInt(document.getElementById("k").value),
+				parseInt(document.getElementById("a").value)]
+			var suma = 0;
+			for (var i = 0; i < 6; i ++) {
+				suma += daus[i];
+			}
+			if (suma != 8) {
+				alert("No hi ha 8 daus!");
+			}
+			else {
+				for (var r = 0; r < 6; r ++) {
+					for (var s = r+1; s < 6; s ++) {
+						var p = segona_tirada(daus, [r,s]);
+						var e = Math.round(10*4*(r+s+2)*p)/10;
+						var p100 = Math.round(100*p);
+						document.getElementById("p" + r.toString() + s.toString()).innerHTML = p100.toString() + "%";
+						document.getElementById("e" + r.toString() + s.toString()).innerHTML = e.toString();
+						if (p100 >= 50) {
+							document.getElementById("p" + r.toString() + s.toString()).bgColor = "LimeGreen";
+						}
+						else {
+							document.getElementById("p" + r.toString() + s.toString()).bgColor = "white";
+						}
+					}
+				}
+			}
+		}
+
+		function primera() {
+			var daus = [parseInt(document.getElementById("v").value),
+				parseInt(document.getElementById("n").value),
+				parseInt(document.getElementById("j").value),
+				parseInt(document.getElementById("q").value),
+				parseInt(document.getElementById("k").value),
+				parseInt(document.getElementById("a").value)]
+			var suma = 0;
+			for (var i = 0; i < 6; i ++) {
+				suma += daus[i];
+			}
+			if (suma != 8) {
+				alert("No hi ha 8 daus!");
+			}
+			else {
+				for (var r = 0; r < 6; r ++) {
+					for (var s = r+1; s < 6; s ++) {
+						var p = primera_tirada(daus, [r,s]);
+						var e = Math.round(10*4*(r+s+2)*p)/10;
+						var p100 = Math.round(100*p);
+						document.getElementById("p" + r.toString() + s.toString()).innerHTML = p100.toString() + "%";
+						document.getElementById("e" + r.toString() + s.toString()).innerHTML = e.toString();
+						if (p100 >= 50) {
+							document.getElementById("p" + r.toString() + s.toString()).bgColor = "LimeGreen";
+						}
+						else {
+							document.getElementById("p" + r.toString() + s.toString()).bgColor = "white";
+						}
+					}
+				}
+			}
+		}
+	</script>
+</body>
+</html>
