@@ -6,7 +6,58 @@ function probabilitat(resultat) {
 	return (factorial(n))/((6**n)*factorial(resultat[0])*factorial(resultat[1])*factorial(resultat[2])*factorial(resultat[3])*factorial(resultat[4])*factorial(resultat[5]));
 }
 
-function segona_tirada(daus, objectiu) {
+class Estrategia {
+	constructor(funcio_decisio, funcio_puntuacio) {
+		this.decisio = funcio_decisio;
+		this.puntuacio = funcio_puntuacio;
+	}
+
+	// probabilitat que al final obtinguem >= k
+	probabilitat_segona_tirada(daus, k) {
+		var p = 0;
+		var subconjunt_daus = this.decisio(daus);
+		var n = subconjunt_daus[0] + subconjunt_daus[1] + subconjunt_daus[2] + subconjunt_daus[3] + subconjunt_daus[4] + subconjunt_daus[5];
+		for (var a1 = 0; a1 <= 8-n; a1 ++) {
+			for (var a2 = 0; a2 <= 8-n-a1; a2 ++) {
+				for (var a3 = 0; a3 <= 8-n-a1-a2; a3 ++) {
+					for (var a4 = 0; a4 <= 8-n-a1-a2-a3; a4 ++) {
+						for (var a5 = 0; a5 <= 8-n-a1-a2-a3-a4; a5 ++) {
+							var a6 = 8-n-a1-a2-a3-a4-a5;
+							var v = [subconjunt_daus[0] + a1, subconjunt_daus[1] + a2, subconjunt_daus[2] + a3, subconjunt_daus[3] + a4, subconjunt_daus[4] + a5, subconjunt_daus[5] + a6];
+							if (this.puntuacio(v) >= k) {
+								p += probabilitat([a1,a2,a3,a4,a5,a6])
+							}
+						}
+					}
+				}
+			}
+		}
+		return p;
+	}
+
+	// probabilitat que al final obtinguem >= k
+	probabilitat_primera_tirada(daus, k) {
+		var p = 0;
+		var subconjunt_daus = this.decisio(daus);
+		var n = subconjunt_daus[0] + subconjunt_daus[1] + subconjunt_daus[2] + subconjunt_daus[3] + subconjunt_daus[4] + subconjunt_daus[5];
+		for (var a1 = 0; a1 <= 8-n; a1 ++) {
+			for (var a2 = 0; a2 <= 8-n-a1; a2 ++) {
+				for (var a3 = 0; a3 <= 8-n-a1-a2; a3 ++) {
+					for (var a4 = 0; a4 <= 8-n-a1-a2-a3; a4 ++) {
+						for (var a5 = 0; a5 <= 8-n-a1-a2-a3-a4; a5 ++) {
+							var a6 = 8-n-a1-a2-a3-a4-a5;
+							var v = [subconjunt_daus[0] + a1, subconjunt_daus[1] + a2, subconjunt_daus[2] + a3, subconjunt_daus[3] + a4, subconjunt_daus[4] + a5, subconjunt_daus[5] + a6];
+							p += probabilitat([a1,a2,a3,a4,a5,a6])*this.probabilitat_segona_tirada(v, k);
+						}
+					}
+				}
+			}
+		}
+		return p;
+	}
+}
+
+function segona_tirada_44(daus, objectiu) {
 	if (objectiu.includes(5)) {
 		// l'objectiu inclou l'as
 		var index;
@@ -71,7 +122,7 @@ function segona_tirada(daus, objectiu) {
 	}
 }
 
-function primera_tirada(daus, objectiu) {
+function primera_tirada_44(daus, objectiu) {
 	if (objectiu.includes(5)) {
 		// l'objectiu inclou l'as
 		var index;
@@ -101,7 +152,7 @@ function primera_tirada(daus, objectiu) {
 								var w = v;
 								w[objectiu[0]] += dau1;
 								w[5] += as;
-								p += probabilitat(v)*segona_tirada(w, objectiu);
+								p += probabilitat(v)*segona_tirada_44(w, objectiu);
 							}
 						}
 					}
@@ -137,7 +188,7 @@ function primera_tirada(daus, objectiu) {
 								w[objectiu[0]] += dau1;
 								w[objectiu[1]] += dau2;
 								w[5] += as;
-								p += probabilitat(v)*segona_tirada(w, objectiu);
+								p += probabilitat(v)*segona_tirada_44(w, objectiu);
 							}
 						}
 					}
@@ -147,6 +198,81 @@ function primera_tirada(daus, objectiu) {
 		}
 	}
 }
+
+function puntuacio_44(daus) {
+	var escollits = [];
+	for (var i = 0; i <= 4; i ++) {
+		if (daus[i] > 0) {
+			escollits.push(i);
+		}
+	}
+	if (escollits.length > 2) {
+		return 0;
+	}
+	else {
+		for (var i = 0; i < escollits.length; i ++) {
+			if (daus[escollits[i]] > 4) {
+				return 0;
+			}
+		}
+	}
+	if (escollits.length == 0) {
+		return 44;
+	}
+	else if (escollits.length == 1) {
+		return 4*(6+escollits[0]);
+	}
+	else if (escollits.length == 2) {
+		return 4*(escollits[0]+escollits[1]);
+	}
+}
+
+function funcio_decisio_garrepa_probabilitat_44(daus) {
+	var max = 0;
+	var quatrequatres = [];
+	for (var m = 0; m <= 5; m ++) {
+		for (var n = 0; n < m; n ++) {
+			var p = primera_tirada_44(daus, [m,n]);
+			if (p > max) {
+				max = p;
+				quatrequatres = [[m,n]];
+			}
+			else if (p == max) {
+				quatrequatres.push([m,n]);
+			}
+		}
+	}
+	var eleccio = null;
+	if (quatrequatres.length == 1) {
+		eleccio = quatrequatres[0];
+	}
+	else {
+		max = 0;
+		for (var i = 0; i < quatrequatres.length; i ++) {
+			var suma = quatrequatres[i][0] + quatrequatres[i][1];
+			if (suma >= max) {
+				max = suma;
+				eleccio = quatrequatres[i];
+			}
+		}
+	}
+	var subconjunt = [0,0,0,0,0,daus[5]];
+	if (daus[eleccio[0]] > 4) {
+		subconjunt[eleccio[0]] = 4;
+	}
+	else {
+		subconjunt[eleccio[0]] = daus[eleccio[0]];
+	}
+	if (daus[eleccio[1]] > 4) {
+		subconjunt[eleccio[1]] = 4;
+	}
+	else {
+		subconjunt[eleccio[1]] = daus[eleccio[1]];
+	}
+	return subconjunt;
+}
+
+const estrategia_garrepa_probabilitat_44 = new Estrategia(funcio_decisio_garrepa_probabilitat_44, puntuacio_44);
 
 function factorial(n) {
 	if (n == 0 || n == 1) {

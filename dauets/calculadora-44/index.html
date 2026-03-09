@@ -133,8 +133,42 @@
 		</tr>
 	</table>
 
+	<p>Estratègies:</p>
+
+	<table>
+		<tr>
+			<td>
+				Estratègia
+			</td>
+			<td>
+				Probabilitat
+			</td>
+			<td>
+				Esperança
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Garrepa (p)
+			</td>
+			<td id="p-garrepa-probabilitat"></td>
+			<td id="e-garrepa-probabilitat"></td>
+		</tr>
+		<tr>
+			<td>
+				Garrepa (e)
+			</td>
+			<td id="p-garrepa-esperança"></td>
+			<td id="e-garrepa-esperança"></td>
+		</tr>
+	</table>
+
 	<p>
 		Aquí teniu una calculadora rònega per a calcular les probabilitats i esperances de cada 4/4, segons la distribució inicial de daus. No cal ser un geni per a fer-la anar, així que no hi incloc instruccions. Salut!
+	</p>
+
+	<p>
+		<b>Estratègia garrepa (p):</b> En cada tirada, anem a buscar el 4/4 que ens garanteixi major probabilitat d'obtenir 4/4. Si n'hi ha més d'un, escollim el que ens donaria major puntuació. Si altre cop n'hi ha més d'un, ens quedem amb el 4/4 que contingui un dau més alt.
 	</p>
 
 	<script>
@@ -155,7 +189,7 @@
 			else {
 				for (var r = 0; r < 6; r ++) {
 					for (var s = r+1; s < 6; s ++) {
-						var p = segona_tirada(daus, [r,s]);
+						var p = segona_tirada_44(daus, [r,s]);
 						var e = Math.round(10*4*(r+s+2)*p)/10;
 						var p100 = Math.round(100*p);
 						document.getElementById("p" + r.toString() + s.toString()).innerHTML = p100.toString() + "%";
@@ -169,6 +203,12 @@
 					}
 				}
 			}
+			document.getElementById("p-garrepa-probabilitat").innerHTML = "";
+			document.getElementById("p-garrepa-probabilitat").bgColor = "white";
+			document.getElementById("e-garrepa-probabilitat").innerHTML = "";
+			document.getElementById("p-garrepa-esperança").innerHTML = "";
+			document.getElementById("p-garrepa-esperança").bgColor = "white";
+			document.getElementById("e-garrepa-esperança").innerHTML = "";
 		}
 
 		function primera() {
@@ -188,7 +228,7 @@
 			else {
 				for (var r = 0; r < 6; r ++) {
 					for (var s = r+1; s < 6; s ++) {
-						var p = primera_tirada(daus, [r,s]);
+						var p = primera_tirada_44(daus, [r,s]);
 						var e = Math.round(10*4*(r+s+2)*p)/10;
 						var p100 = Math.round(100*p);
 						document.getElementById("p" + r.toString() + s.toString()).innerHTML = p100.toString() + "%";
@@ -202,6 +242,26 @@
 					}
 				}
 			}
+
+			var p100 = Math.round(100*estrategia_garrepa_probabilitat_44.probabilitat_primera_tirada(daus, 1));
+			document.getElementById("p-garrepa-probabilitat").innerHTML = p100.toString() + "%";
+			if (p100 >= 50) {
+				document.getElementById("p-garrepa-probabilitat").bgColor = "LimeGreen";
+			}
+			else {
+				document.getElementById("p-garrepa-probabilitat").bgColor = "white";
+			}
+			document.getElementById("e-garrepa-probabilitat").innerHTML = "";
+
+			p100 = 0;
+			document.getElementById("p-garrepa-esperança").innerHTML = "";
+			if (p100 >= 50) {
+				document.getElementById("p-garrepa-esperança").bgColor = "LimeGreen";
+			}
+			else {
+				document.getElementById("p-garrepa-esperança").bgColor = "white";
+			}
+			document.getElementById("e-garrepa-esperança").innerHTML = "";
 		}
 	</script>
 </body>
