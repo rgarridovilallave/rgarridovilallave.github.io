@@ -282,6 +282,18 @@
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td class="total-cell difuminado" onclick="this.classList.toggle('difuminado')">0</td>
                 </tr>
+                <tr class="player-row">
+                    <td><input type="text" class="cell-input name-input" placeholder="Jugador 5"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td><input type="number" class="cell-input score-input" min="0"></td>
+                    <td class="total-cell difuminado" onclick="this.classList.toggle('difuminado')">0</td>
+                </tr>
             </tbody>
         </table>
 
@@ -310,19 +322,23 @@
                 let maxPuntuacion = -Infinity;
                 let inputsDeEstaColumna = [];
 
+                let count = 0;
                 filas.forEach(fila => {
                     const input = fila.querySelectorAll('.score-input')[col];
                     inputsDeEstaColumna.push(input);
                     const valor = parseFloat(input.value);
                     if (!isNaN(valor) && valor > maxPuntuacion) {
                         maxPuntuacion = valor;
+                        count = 1;
+                    } else if (!isNaN(valor) && valor >= maxPuntuacion) {
+                        count ++;
                     }
                 });
 
                 inputsDeEstaColumna.forEach(input => {
                     input.classList.remove('ganador-columna');
                     const valor = parseFloat(input.value);
-                    if (!isNaN(valor) && valor === maxPuntuacion && valor > 0) {
+                    if (!isNaN(valor) && valor === maxPuntuacion && valor > 0 && count == 1) {
                         input.classList.add('ganador-columna');
                     }
                 });
