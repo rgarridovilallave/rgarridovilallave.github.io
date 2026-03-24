@@ -135,6 +135,10 @@
         }
         .cell-input[type=number] { -moz-appearance: textfield; }
 
+        .score-input {
+            border-left: 1px solid var(--border-color);
+        }
+
         /* === ESTILOS PARA EL GANADOR DE LA COLUMNA (+5) === */
         .ganador-columna {
             font-weight: 900 !important;
@@ -235,7 +239,7 @@
             </thead>
             <tbody>
                 <tr class="player-row">
-                    <td><input type="text" class="cell-input name-input" placeholder="Jugador 1"></td>
+                    <td><input type="text" class="cell-input name-input" placeholder="Jugador/a"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
@@ -247,7 +251,7 @@
                     <td class="total-cell difuminado" onclick="this.classList.toggle('difuminado')">0</td>
                 </tr>
                 <tr class="player-row">
-                    <td><input type="text" class="cell-input name-input" placeholder="Jugador 2"></td>
+                    <td><input type="text" class="cell-input name-input" placeholder="Jugador/a"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
@@ -259,7 +263,7 @@
                     <td class="total-cell difuminado" onclick="this.classList.toggle('difuminado')">0</td>
                 </tr>
                 <tr class="player-row">
-                    <td><input type="text" class="cell-input name-input" placeholder="Jugador 3"></td>
+                    <td><input type="text" class="cell-input name-input" placeholder="Jugador/a"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
@@ -271,7 +275,7 @@
                     <td class="total-cell difuminado" onclick="this.classList.toggle('difuminado')">0</td>
                 </tr>
                 <tr class="player-row">
-                    <td><input type="text" class="cell-input name-input" placeholder="Jugador 4"></td>
+                    <td><input type="text" class="cell-input name-input" placeholder="Jugador/a"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
@@ -283,7 +287,7 @@
                     <td class="total-cell difuminado" onclick="this.classList.toggle('difuminado')">0</td>
                 </tr>
                 <tr class="player-row">
-                    <td><input type="text" class="cell-input name-input" placeholder="Jugador 5"></td>
+                    <td><input type="text" class="cell-input name-input" placeholder="Jugador/a"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
                     <td><input type="number" class="cell-input score-input" min="0"></td>
@@ -299,10 +303,10 @@
 
         <div class="zona-botones">
             <button class="btn btn-revelar" onclick="revelarGanador()">
-                🏆 Guanyador
+                🏆 Guanyador/a
             </button>
             <button class="btn btn-reset" onclick="resetearTabla()">
-                🗑️ Reinici
+                🗑️ Reiniciar
             </button>
         </div>
     </div>
@@ -406,6 +410,9 @@
                     total.innerText = '0';
                     total.classList.add('difuminado');
                     total.classList.remove('campeon-final'); // Quitamos la corona
+                });
+                document.querySelectorAll('.name-input').forEach(total => {
+                    total.placeholder = "Jugador/a"
                 });
             }
         }
